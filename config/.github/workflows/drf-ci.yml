@@ -1,0 +1,400 @@
+def delete(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            return Response({"error": "Not found"}, status=404)
+
+        product.delete()
+        return Response({"message": "Deleted"}, status=204)
+path("products/<int:pk>/", views.ProductListAPIView.as_view()),
+export type Product = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+};
+import type { Product } from "./types";
+
+export const mockProducts: Product[] = [
+  {
+    id: 1,
+    title: "Ноутбук Lenovo",
+    description: "Хороший ноутбук для учебы и работы",
+    price: 300000,
+    image: "/media/products/laptop.jpg",
+  },
+  {
+    id: 2,
+    title: "Мышка Logitech",
+    description: "Беспроводная мышка",
+    price: 12000,
+    image: "",
+  },
+];
+import { useEffect, useState } from "react";
+import { mockProducts } from "./mockProducts";
+import type { Product } from "./types";
+
+function Main() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setProducts(mockProducts);
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <p>Идет загрузка...</p>;
+  }
+
+  return (
+    <div>
+      <h1>Список товаров</h1>
+
+      {products.length === 0 ? (
+        <p>Товаров пока нет</p>
+      ) : (
+        <ul>
+          {products.map((product) => (
+            <li key={product.id}>
+              <h3>{product.title}</h3>
+              <p>{product.description}</p>
+              <p>Цена: {product.price}</p>
+
+              {product.image ? (
+                <img
+                  src={`http://127.0.0.1:8000${product.image}`}
+                  alt={product.title}
+                  width={150}
+                />
+              ) : (
+                <p>Нет изображения</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default Main;
+Сделаем практику прямо под твой кейс (React + mock → API).
+Структура: результат → задание → код → уровни
+
+---
+
+# 🎯 Результат
+
+Ты научишься:
+
+* писать фронт без backend
+* использовать mock данные
+* легко переключаться на реальный API
+
+---
+
+# 🟢 Уровень 1 — ПОВТОРИ
+
+## 📌 Задание
+
+Сделай список товаров из mock данных.
+
+---
+
+## 💻 Шаблон
+
+### types.ts
+
+TypeScript
+
+
+export type Product = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+};
+
+---
+
+### mockProducts.ts
+
+TypeScript
+
+
+import { Product } from "./types";
+
+export const mockProducts: Product[] = [
+  {
+    id: 1,
+    title: "Ноутбук",
+    description: "Игровой",
+    price: 300000,
+    image: "",
+  },
+  {
+    id: 2,
+    title: "Мышка",
+    description: "Беспроводная",
+    price: 10000,
+    image: "",
+  },
+];
+
+---
+
+### Main.tsx
+
+React TSX
+
+
+import { useEffect, useState } from "react";
+import { Product } from "./types";
+import { mockProducts } from "./mockProducts";
+
+function Main() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setProducts(mockProducts);
+  }, []);
+
+  return (
+    <div>
+      <h1>Товары</h1>
+
+      {products.map((product) => (
+        <div key={product.id}>
+          <h3>{product.title}</h3>
+          <p>{product.description}</p>
+          <p>{product.price}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default Main;
+
+---
+
+# 🟡 Уровень 2 — ИЗМЕНИ
+
+## 📌 Задание
+
+Добавь:
+
+* кнопку "Удалить"
+* удаление товара из списка
+
+---
+
+## 💡 Подсказка
+
+React TSX
+
+
+function handleDelete(id: number) {
+  setProducts(products.filter(p => p.id !== id));
+}
+
+---
+
+## 🔧 Что должно получиться
+
+React TSX
+
+
+<button onClick={() => handleDelete(product.id)}>
+  Удалить
+</button>
+
+---
+
+# 🔴 Уровень 3 — СДЕЛАЙ СВОЁ
+
+## 📌 Задание
+
+Сделай мини-приложение:
+
+👉 "Добавить товар"
+
+---
+
+## 💡 Нужно сделать
+
+1. Инпуты:
+
+React TSX
+
+
+<input placeholder="Название" />
+<input placeholder="Цена" />
+
+2. Кнопка:
+
+React TSX
+
+
+<button>Добавить</button>
+
+3. Логика:
+
+* создаёшь новый объект
+* добавляешь в products
+
+---
+
+## 💡 Подсказка
+
+React TSX
+
+
+const newProduct = {
+  id: Date.now(),
+  title,
+  description: "Новый товар",
+  price: Number(price),
+  image: "",
+};
+
+setProducts([...products, newProduct]);
+
+---
+
+# 🔥 Бонус (реальный уровень)
+
+Когда backend появится:
+
+### было:
+
+TypeScript
+
+
+setProducts(mockProducts);
+
+### станет:
+
+TypeScript
+
+
+const res = await fetch("http://127.0.0.1:8000/api/products/");
+const data = await res.json();
+setProducts(data);
+
+👉 ВСЁ. Логика не меняется.
+
+---
+
+# 📌 Итог
+
+Ты строишь фронт так:
+
+copy
+
+
+types → mock → UI → логика → API
+
+---
+
+Если хочешь дальше — дам практику:
+
+* уровень 4 (корзина)
+* уровень 5 (логин + auth)
+* уровень 6 (синхрон с backend командой)
+from rest_framework import serializers
+from .models import Note
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = "__all__"
+from rest_framework.generics import ListCreateAPIView
+
+from .models import Note
+from .serializers import NoteSerializer
+
+
+class NoteListView(ListCreateAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+from rest_framework.test import APIClient
+
+from notes.models import Note
+
+
+def test_get_notes():
+    client = APIClient()
+
+    Note.objects.create(
+        title="Первая заметка",
+        text="Текст"
+    )
+
+    response = client.get("/api/notes/")
+
+    assert response.status_code == 200
+    assert len(response.data) == 1
+    assert response.data[0]["title"] == "Первая заметка"
+
+
+def test_create_note():
+    client = APIClient()
+
+    response = client.post(
+        "/api/notes/",
+        {
+            "title": "Новая заметка",
+            "text": "Описание"
+        },
+        format="json"
+    )
+
+    assert response.status_code == 201
+    assert Note.objects.count() == 1
+    assert response.data["title"] == "Новая заметка"
+.github/workflows/drf-ci.yml
+name: DRF CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DJANGO_SETTINGS_MODULE: config.settings
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  test:
+    name: Check DRF project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check migrations
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Apply migrations
+        run: python manage.py migrate --noinput
+
+      - name: Run tests
+        run: python -m pytest -q
