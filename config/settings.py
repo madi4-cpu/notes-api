@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notes'
+    'rest_framework',
+    'notes',
 ]
 
 MIDDLEWARE = [
@@ -74,10 +75,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import os
+
+
+# settings.py
+import os
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "notes",
+        "USER": "notes",
+        "PASSWORD": "notes",
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": "5432",
     }
 }
 
