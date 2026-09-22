@@ -8,3 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 EXPOSE 8000
+
+RUN broken_command_for_testing
