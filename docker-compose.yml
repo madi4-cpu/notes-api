@@ -16,6 +16,7 @@ services:
       retries: 10
 
   backend:
+  image: ghcr.io/madi4-cpu/notes-api:latest
     build:
       context: .
       dockerfile: Dockerfile
